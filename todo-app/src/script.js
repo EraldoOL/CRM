@@ -67,3 +67,13 @@ function updateCharts() {
   barChartInstance.update();
   pieChartInstance.update();
 }
+
+// Seleciona elementos do DOM
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+
+// Adiciona evento ao clicar no botão hambúrguer
+hamburger.addEventListener('click', () => {
+  sidebar.classList.toggle('active'); // Abre ou fecha o menu
+  hamburger.classList.toggle('active'); // Anima o botão
+});
