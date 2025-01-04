@@ -1,14 +1,64 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finanças - To-Do Masterpiece</title>
+  <link rel="stylesheet" href="../src/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
+<!-- Adicione no topo do corpo HTML -->
+<<div class="hamburger" id="hamburger">
+  <div class="line"></div>
+  <div class="line"></div>
+  <div class="line"></div>
+</div>
+<div class="sidebar" id="sidebar">
+  <div class="logo">Menu</div>
+  <ul class="menu">
+    <li><a href="index.html">Página Inicial</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="financas.html">Finanças</a></li>
+    <li><a href="relatorios.html">Relatórios</a></li>
+  </ul>
+</div>
 
+  <!-- Main Content -->
+  <main class="content">
+    <header>
+      <h1>Finanças</h1>
+    </header>
+
+    <section>
+      <!-- Add Transaction Section -->
+      <div class="add-transaction">
+        <h2>Adicionar Transação</h2>
+        <form id="transaction-form">
+          <input type="number" id="transaction-value" placeholder="Valor (ex: 100 ou -50)" required>
+          <input type="date" id="transaction-date" required>
+          <button type="submit">Adicionar</button>
+        </form>
+      </div>
+
+      <!-- Transactions List -->
+      <div class="transactions-list">
+        <h2>Transações</h2>
+        <ul id="transactions"></ul>
+      </div>
+
+      <!-- Financial Summary -->
+      <div class="financial-summary">
+        <h2>Resumo Financeiro</h2>
+        <p><strong>Saldo Total:</strong> <span id="total-balance">R$ 0,00</span></p>
+        <p><strong>Status:</strong> <span id="financial-status">Sem metas definidas</span></p>
+        <div class="progress-bar-container">
+          <div id="progress-bar"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../src/financas.js"></script>
 </body>
-
 </html>
