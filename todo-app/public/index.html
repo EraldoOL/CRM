@@ -3,10 +3,238 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Dashboard - To-Do Masterpiece</title>
+  <link rel="stylesheet" href="../src/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 </head>
 <body>
-  
+  <!-- Sidebar Menu -->
+  <nav class="sidebar">
+    <div class="logo">To-Do Masterpiece</div>
+    <ul>
+      <li><a href="index.html" class="active">Dashboard</a></li>
+      <li><a href="financas.html">Finanças</a></li>
+      <li><a href="relatorios.html">Relatórios</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content">
+    <header>
+      <h1>Dashboard</h1>
+    </header>
+
+    <section>
+      <!-- Add Task Section -->
+      <div class="add-task">
+        <h2>Adicionar Tarefa</h2>
+        <form id="task-form">
+          <input type="text" id="task-title" placeholder="Título da tarefa" required>
+          <textarea id="task-desc" placeholder="Descrição"></textarea>
+          <input type="datetime-local" id="task-deadline" required>
+          <button type="submit">Adicionar</button>
+        </form>
+      </div>
+
+      <!-- Graphs -->
+      <div class="graphs">
+        <h2>Gráficos</h2>
+        <canvas id="bar-chart"></canvas>
+        <canvas id="pie-chart" style="display:none;"></canvas>
+        <div>
+          <button id="toggle-bar">Gráfico de Barras</button>
+          <button id="toggle-pie">Gráfico de Pizza</button>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary">
+        <h2>Progresso Geral</h2>
+        <div id="progress">
+          <!-- Atualizado dinamicamente -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../src/script.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do Masterpiece</title>
+  <link rel="stylesheet" href="../src/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white font-sans min-h-screen">
+  <header class="p-6 backdrop-blur-lg bg-opacity-30 bg-black shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-5xl font-extrabold text-gradient animate-text-glow">To-Do Masterpiece</h1>
+    </div>
+  </header>
+
+  
+  <main class="container mx-auto px-8 py-12">
+    
+    <section class="text-center mb-16">
+      <h2 class="text-6xl font-black mb-6">Stay Ahead of Your Day</h2>
+      <p class="text-xl opacity-80 max-w-3xl mx-auto">Track and complete your tasks effortlessly with style.</p>
+    </section>
+
+   
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+     
+      <div class="bg-black bg-opacity-40 p-8 rounded-3xl shadow-2xl">
+        <h3 class="text-3xl font-bold mb-6">Add a Task</h3>
+        <form id="task-form" class="space-y-6">
+          <div>
+            <input type="text" id="task-title" placeholder="Task Title" class="input-field">
+          </div>
+          <div>
+            <textarea id="task-desc" placeholder="Task Description" rows="3" class="input-field"></textarea>
+          </div>
+          <button type="submit" class="btn-primary">Add Task</button>
+        </form>
+      </div>
+
+      
+      <div class="bg-black bg-opacity-40 p-8 rounded-3xl shadow-2xl">
+        <h3 class="text-3xl font-bold mb-6">Your Tasks</h3>
+        <ul id="task-list" class="space-y-4">
+         
+        </ul>
+      </div>
+    </div>
+
+    
+    <section class="mt-16">
+      <h3 class="text-4xl font-bold text-center mb-8">Task Progress</h3>
+      <div class="flex justify-center mb-4">
+        <label for="chart-type" class="mr-4">Select Chart Type:</label>
+        <select id="chart-type" class="input-field max-w-xs">
+          <option value="bar">Bar</option>
+          <option value="pie">Pie</option>
+        </select>
+      </div>
+      <div class="bg-black bg-opacity-40 p-12 rounded-3xl shadow-2xl">
+        <canvas id="task-chart"></canvas>
+      </div>
+    </section>
+  </main>
+
+  
+  <footer class="text-center py-6 bg-black bg-opacity-50">
+    <p class="text-sm text-teal-300">&copy; 2025 To-Do Masterpiece. Crafted with ❤️</p>
+  </footer>
+
+ 
+  <script>
+    const ctx = document.getElementById('task-chart').getContext('2d');
+    const chartTypeSelector = document.getElementById('chart-type');
+    const taskForm = document.getElementById('task-form');
+    const taskList = document.getElementById('task-list');
+
+    let taskStats = { completed: 0, total: 0 };
+
+    let taskChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Completed', 'Pending'],
+        datasets: [{
+          label: 'Task Stats',
+          data: [0, 0],
+          backgroundColor: ['#10B981', '#F87171'],
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          y: { beginAtZero: true },
+        },
+      },
+    });
+
+    function updateChart() {
+      taskChart.data.datasets[0].data = [
+        taskStats.completed,
+        taskStats.total - taskStats.completed,
+      ];
+      taskChart.update();
+    }
+
+    chartTypeSelector.addEventListener('change', (e) => {
+      const newType = e.target.value;
+      taskChart.destroy();
+      taskChart = new Chart(ctx, {
+        type: newType,
+        data: {
+          labels: ['Completed', 'Pending'],
+          datasets: [{
+            label: 'Task Stats',
+            data: [taskStats.completed, taskStats.total - taskStats.completed],
+            backgroundColor: ['#10B981', '#F87171'],
+            borderWidth: 2,
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+          },
+          scales: newType === 'bar' ? {
+            y: { beginAtZero: true },
+          } : {},
+        },
+      });
+    });
+
+    taskForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('task-title').value;
+      const desc = document.getElementById('task-desc').value;
+
+      if (!title) return alert('Task title is required!');
+
+      const li = document.createElement('li');
+      li.className = 'task-item';
+      li.innerHTML = `
+        <div>
+          <h4 class="text-lg font-bold">${title}</h4>
+          <p class="text-sm opacity-70">${desc}</p>
+        </div>
+        <button class="btn-complete">Complete</button>
+      `;
+
+      taskList.appendChild(li);
+
+      taskStats.total++;
+      updateChart();
+
+      li.querySelector('.btn-complete').addEventListener('click', () => {
+        li.remove();
+        taskStats.completed++;
+        updateChart();
+      });
+
+      taskForm.reset();
+    });
+  </script>
+</body>
+</html> -->
