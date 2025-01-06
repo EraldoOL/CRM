@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório de Tarefas</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+<body class="bg-blue-100 text-gray-900 font-sans">
+  <!-- Menu Hambúrguer -->
+  <div class="menu-hamburger-container">
+    <button class="menu-toggle" id="menu-toggle">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </div>
+
+  <!-- Sidebar (Menu Lateral) -->
+  <div id="sidebar" class="sidebar">
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="finances.html">Finanças</a></li>
+      <li><a href="relatorio.html" class="active">Relatório</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <main class="container mx-auto p-8">
+    <section>
+      <h2 class="text-3xl font-bold mb-6">Relatório de Desempenho</h2>
+
+      <!-- Tarefas Concluídas e Pendentes -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h3 class="text-xl font-semibold mb-4">Progresso Semanal</h3>
+          <canvas id="weekly-chart"></canvas>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h3 class="text-xl font-semibold mb-4">Progresso Mensal</h3>
+          <canvas id="monthly-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Tarefas Completadas vs Pendentes -->
+      <div class="bg-white p-6 rounded-lg shadow-lg mb-12">
+        <h3 class="text-xl font-semibold mb-4">Status Geral de Tarefas</h3>
+        <canvas id="overall-status-chart"></canvas>
+      </div>
+
+      <!-- Porcentagem de Conclusão -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-semibold mb-4">Porcentagem Geral de Conclusão</h3>
+        <div class="progress-bar" style="width: 70%; background-color: #10B981;">
+          70% Concluídas
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center py-4 bg-blue-500 text-white">
+    <p>&copy; 2025 Todos os direitos reservados</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Função para alternar o menu hambúrguer
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('active');
+    });
+
+    // Gráficos com Chart.js
+    const weeklyChartCtx = document.getElementById('weekly-chart').getContext('2d');
+    const monthlyChartCtx = document.getElementById('monthly-chart').getContext('2d');
+    const overallStatusChartCtx = document.getElementById('overall-status-chart').getContext('2d');
+
+    // Weekly Tasks Chart
+    new Chart(weeklyChartCtx, {
+      type: 'line',
+      data: {
+        labels: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
+        datasets: [{
+          label: 'Tarefas Completas',
+          data: [3, 4, 5, 3, 6, 4, 2],
+          borderColor: '#10B981',
+          fill: false,
+          tension: 0.4
+        }]
+      }
+    });
+
+    // Monthly Tasks Chart
+    new Chart(monthlyChartCtx, {
+      type: 'line',
+      data: {
+        labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+        datasets: [{
+          label: 'Tarefas Completas',
+          data: [10, 20, 15, 25],
+          borderColor: '#F87171',
+          fill: false,
+          tension: 0.4
+        }]
+      }
+    });
+
+    // Overall Task Status Chart (Bar Chart)
+    new Chart(overallStatusChartCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Completas', 'Pendentes'],
+        datasets: [{
+          label: 'Status Geral',
+          data: [70, 30], // Percentual de tarefas completadas
+          backgroundColor: ['#10B981', '#F87171'],
+          borderColor: ['#10B981', '#F87171'],
+          borderWidth: 1
+        }]
+      }
+    });
+  </script>
+
+  <!-- CSS -->
+  <style>
+    /* Estilos do Menu Hambúrguer */
+    .menu-hamburger-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    .menu-toggle {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .bar {
+      width: 30px;
+      height: 4px;
+      background-color: #333;
+      border-radius: 4px;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: -250px;
+      top: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #111;
+      transition: left 0.3s ease;
+      padding-top: 60px;
+    }
+
+    .sidebar.active {
+      left: 0;
+    }
+
+    .nav-links {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .nav-links li {
+      padding: 8px 16px;
+    }
+
+    .nav-links li a {
+      color: white;
+      text-decoration: none;
+      display: block;
+    }
+
+    .nav-links li a.active {
+      background-color: #4CAF50;
+    }
+
+    .progress-bar {
+      height: 30px;
+      color: white;
+      text-align: center;
+      border-radius: 10px;
+      line-height: 30px;
+    }
+  </style>
+</body>
+</html>
