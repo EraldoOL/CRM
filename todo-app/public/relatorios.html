@@ -4,19 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Relatório de Tarefas</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../src/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 </head>
 <body class="bg-blue-100 text-gray-900 font-sans">
   <!-- Menu Hambúrguer -->
-  <div class="menu-hamburger-container">
-    <button class="menu-toggle" id="menu-toggle">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-  </div>
+  <div class="hamburger" id="hamburger">
+  <div class="line"></div>
+  <div class="line"></div>
+  <div class="line"></div>
+</div>
+<div class="sidebar" id="sidebar">
+  <div class="logo">Menu</div>
+  <ul class="menu">
+    <li><a href="index.html">Página Inicial</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="financas.html">Finanças</a></li>
+    <li><a href="relatorios.html">Relatórios</a></li>
+  </ul>
+</div>
 
   <!-- Sidebar (Menu Lateral) -->
   <div id="sidebar" class="sidebar">
@@ -68,10 +75,14 @@
   <!-- JavaScript -->
   <script>
     // Função para alternar o menu hambúrguer
-    document.getElementById('menu-toggle').addEventListener('click', function() {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('active');
-    });
+    const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+
+// Adiciona evento ao clicar no botão hambúrguer
+hamburger.addEventListener('click', () => {
+  sidebar.classList.toggle('active'); // Abre ou fecha o menu
+  hamburger.classList.toggle('active'); // Anima o botão
+});
 
     // Gráficos com Chart.js
     const weeklyChartCtx = document.getElementById('weekly-chart').getContext('2d');
@@ -132,24 +143,33 @@
       top: 20px;
       left: 20px;
       z-index: 1000;
+      cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 30px;
+  width: 30px;
+  
     }
 
     .menu-toggle {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      width: 30px;
+      width: 20px;
       height: 20px;
       background: none;
       border: none;
       cursor: pointer;
+      
     }
 
     .bar {
       width: 30px;
-      height: 4px;
-      background-color: #333;
+      height: 2px;
+      background-color: #1e3a8a;
       border-radius: 4px;
+      
     }
 
     .sidebar {
