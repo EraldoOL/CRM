@@ -1,20 +1,15 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-
+const express = require('express');
+const path = require('path');
 const app = express();
+
+// Serve a pasta 'src' como estática
+app.use(express.static(path.join(__dirname, 'src')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 const PORT = 3000;
-
-// Middleware para parsear JSON
-app.use(bodyParser.json());
-
-// Configurar rotas públicas
-app.use(express.static("public"));
-
-// Rotas de autenticação
-const authRoutes = require("./routes/auth");
-app.use("/auth", authRoutes);
-
-// Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
