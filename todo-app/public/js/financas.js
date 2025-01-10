@@ -4,29 +4,54 @@ const transactionsList = document.getElementById('transactions');
 const totalBalanceElement = document.getElementById('total-balance');
 const financialStatus = document.getElementById('financial-status');
 const progressBar = document.getElementById('progress-bar');
+const completedTransactionsList = document.getElementById('completed-transactions');
+const pendingReceivablesList = document.getElementById('receivables');
 
-// Add Transaction
+// Adicionar Transação
 transactionForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
+  const name = document.getElementById('transaction-name').value;
+  const description = document.getElementById('transaction-desc').value;
   const value = parseFloat(document.getElementById('transaction-value').value);
   const date = document.getElementById('transaction-date').value;
 
-  if (!date || isNaN(value)) return alert('Preencha todos os campos corretamente.');
+  if (!name || !description || !date || isNaN(value)) {
+    return alert('Preencha todos os campos corretamente.');
+  }
 
-  transactions.push({ value, date });
+  transactions.push({ name, description, value, date, status: 'pending' });
   updateFinances();
   transactionForm.reset();
 });
 
-// Update Financial Data
+// Atualizar Dados Financeiros
 function updateFinances() {
-  // Update Transactions List
+  // Atualizar Lista de Transações
   transactionsList.innerHTML = transactions
+    .filter((t) => t.status === 'pending')
+    .map(
+      (transaction, index) => `
+      <li>
+        <span>${transaction.date} - ${transaction.name}</span>
+        <p>${transaction.description}</p>
+        <span class="${transaction.value >= 0 ? 'positive' : 'negative'}">
+          R$ ${transaction.value.toFixed(2)}
+        </span>
+        <button onclick="completeTransaction(${index})">Concluir</button>
+        <button onclick="deleteTransaction(${index})">Excluir</button>
+      </li>`
+    )
+    .join('');
+
+  // Atualizar Lista de Transações Concluídas
+  completedTransactionsList.innerHTML = transactions
+    .filter((t) => t.status === 'completed')
     .map(
       (transaction) => `
       <li>
-        <span>${transaction.date}</span>
+        <span>${transaction.date} - ${transaction.name}</span>
+        <p>${transaction.description}</p>
         <span class="${transaction.value >= 0 ? 'positive' : 'negative'}">
           R$ ${transaction.value.toFixed(2)}
         </span>
@@ -34,14 +59,13 @@ function updateFinances() {
     )
     .join('');
 
-  // Update Total Balance
+  // Atualizar Saldo Total
   const totalBalance = transactions.reduce((sum, transaction) => sum + transaction.value, 0);
   totalBalanceElement.textContent = `R$ ${totalBalance.toFixed(2)}`;
 
-  // Update Financial Status and Progress Bar
+  // Atualizar Barra de Progresso e Status
   const totalPositive = transactions.filter((t) => t.value > 0).reduce((sum, t) => sum + t.value, 0);
   const totalNegative = transactions.filter((t) => t.value < 0).reduce((sum, t) => sum + Math.abs(t.value), 0);
-
   const progress = totalPositive > 0 ? (totalPositive / (totalPositive + totalNegative)) * 100 : 0;
 
   progressBar.style.width = `${progress}%`;
@@ -54,9 +78,34 @@ function updateFinances() {
       : progress >= 40
       ? 'Metas Parciais Concluídas'
       : 'Metas Não Alcançadas';
+
+  // Atualizar Recebíveis
+  const receivables = transactions.filter((t) => t.status === 'pending' && t.value > 0);
+  pendingReceivablesList.innerHTML = receivables
+    .map(
+      (transaction) => `
+      <li>
+        <span>${transaction.date} - ${transaction.name}</span>
+        <p>${transaction.description}</p>
+        <span>R$ ${transaction.value.toFixed(2)}</span>
+      </li>`
+    )
+    .join('');
 }
 
-// Initial Update
+// Concluir Transação
+function completeTransaction(index) {
+  transactions[index].status = 'completed';
+  updateFinances();
+}
+
+// Excluir Transação
+function deleteTransaction(index) {
+  transactions.splice(index, 1);
+  updateFinances();
+}
+
+// Atualização Inicial
 updateFinances();
 
 const hamburger = document.getElementById('hamburger');
