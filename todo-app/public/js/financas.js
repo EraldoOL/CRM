@@ -118,21 +118,31 @@ hamburger.addEventListener('click', () => {
 });
 
 
-// Página de Finanças - Salvar Transações no localStorage
+// Inicializa as transações
+let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+// Função para salvar no localStorage
 function saveTransactionsToLocalStorage() {
   localStorage.setItem('transactions', JSON.stringify(transactions));
 }
 
-transactionForm.addEventListener('submit', (e) => {
+// Adicionar nova transação
+document.getElementById('transaction-form').addEventListener('submit', (e) => {
   e.preventDefault();
   const value = parseFloat(document.getElementById('transaction-value').value);
-  const date = document.getElementById('transaction-date').value;
   const description = document.getElementById('transaction-description').value;
+  const date = document.getElementById('transaction-date').value;
 
-  if (!date || isNaN(value)) return alert('Preencha todos os campos corretamente.');
+  if (!value || !description || !date) {
+    alert('Preencha todos os campos corretamente!');
+    return;
+  }
 
-  transactions.push({ value, date, description });
+  // Adiciona nova transação
+  transactions.push({ value, description, date });
   saveTransactionsToLocalStorage(); // Salva no localStorage
-  updateFinances();
-  transactionForm.reset();
+
+  // Atualiza a interface ou reseta o formulário
+  document.getElementById('transaction-form').reset();
+  alert('Transação adicionada com sucesso!');
 });
