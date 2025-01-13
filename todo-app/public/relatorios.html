@@ -67,6 +67,7 @@
 
     // Atualiza Resumo Financeiro
     function updateFinancialSummary() {
+      
       const moneyReceived = transactions.filter(t => t.value > 0).reduce((sum, t) => sum + t.value, 0);
       const moneySent = transactions.filter(t => t.value < 0).reduce((sum, t) => sum + Math.abs(t.value), 0);
       const totalBalance = moneyReceived - moneySent;
