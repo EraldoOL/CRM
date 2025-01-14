@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Finanças - To-Do Masterpiece</title>
-  <link rel="stylesheet" href="../src/styles.css">
+  <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <!-- Adicione no topo do corpo HTML -->
-<<div class="hamburger" id="hamburger">
+<div class="hamburger" id="hamburger">
   <div class="line"></div>
   <div class="line"></div>
   <div class="line"></div>
@@ -17,8 +17,7 @@
 <div class="sidebar" id="sidebar">
   <div class="logo">Menu</div>
   <ul class="menu">
-    <li><a href="index.html">Página Inicial</a></li>
-    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="index.html">Home</a></li>
     <li><a href="financas.html">Finanças</a></li>
     <li><a href="relatorios.html">Relatórios</a></li>
   </ul>
@@ -31,34 +30,49 @@
     </header>
 
     <section>
-      <!-- Add Transaction Section -->
-      <div class="add-transaction">
-        <h2>Adicionar Transação</h2>
-        <form id="transaction-form">
-          <input type="number" id="transaction-value" placeholder="Valor (ex: 100 ou -50)" required>
-          <input type="date" id="transaction-date" required>
-          <button type="submit">Adicionar</button>
-        </form>
-      </div>
+  <!-- Adicionar Transação -->
+  <div class="add-transaction">
+    <h2>Adicionar Transação</h2>
+    <form id="transaction-form">
+      <input type="text" id="transaction-name" placeholder="Nome da Transação" required>
+      <textarea id="transaction-desc" placeholder="Descrição"></textarea>
+      <input type="number" id="transaction-value" placeholder="Valor (ex: 100 ou -50)" required>
+      <input type="date" id="transaction-date" required>
+      <button type="submit">Adicionar</button>
+    </form>
+  </div>
 
-      <!-- Transactions List -->
-      <div class="transactions-list">
-        <h2>Transações</h2>
-        <ul id="transactions"></ul>
-      </div>
+  <!-- Lista de Transações -->
+  <div class="transactions-list">
+    <h2>Transações Pendentes</h2>
+    <ul id="transactions"></ul>
+  </div>
 
-      <!-- Financial Summary -->
-      <div class="financial-summary">
-        <h2>Resumo Financeiro</h2>
-        <p><strong>Saldo Total:</strong> <span id="total-balance">R$ 0,00</span></p>
-        <p><strong>Status:</strong> <span id="financial-status">Sem metas definidas</span></p>
-        <div class="progress-bar-container">
-          <div id="progress-bar"></div>
-        </div>
-      </div>
-    </section>
+  <!-- Recebíveis -->
+  <div class="receivables-list">
+    <h2>Valores a Receber</h2>
+    <ul id="receivables"></ul>
+  </div>
+
+  <!-- Transações Concluídas -->
+  <div class="completed-list">
+    <h2>Transações Concluídas</h2>
+    <ul id="completed-transactions"></ul>
+  </div>
+
+  <!-- Resumo Financeiro -->
+  <div class="financial-summary">
+    <h2>Resumo Financeiro</h2>
+    <p><strong>Saldo Total:</strong> <span id="total-balance">R$ 0,00</span></p>
+    <p><strong>Status:</strong> <span id="financial-status">Sem metas definidas</span></p>
+    <div class="progress-bar-container">
+      <div id="progress-bar"></div>
+    </div>
+  </div>
+</section>
+    
   </main>
 
-  <script src="../src/financas.js"></script>
+  <script src="./js/financas.js"></script>
 </body>
 </html>

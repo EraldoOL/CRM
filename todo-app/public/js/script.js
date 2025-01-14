@@ -1,4 +1,4 @@
-const barChart = document.getElementById('bar-chart').getContext('2d');
+/*const barChart = document.getElementById('bar-chart').getContext('2d');
 const pieChart = document.getElementById('pie-chart').getContext('2d');
 
 let tasksCompleted = 0;
@@ -66,7 +66,7 @@ function updateCharts() {
 
   barChartInstance.update();
   pieChartInstance.update();
-}
+}*/
 
 // Seleciona elementos do DOM
 const hamburger = document.getElementById('hamburger');
@@ -76,4 +76,24 @@ const sidebar = document.getElementById('sidebar');
 hamburger.addEventListener('click', () => {
   sidebar.classList.toggle('active'); // Abre ou fecha o menu
   hamburger.classList.toggle('active'); // Anima o botão
+});
+
+
+// Página de Finanças - Salvar Transações no localStorage
+function saveTransactionsToLocalStorage() {
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+transactionForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const value = parseFloat(document.getElementById('transaction-value').value);
+  const date = document.getElementById('transaction-date').value;
+  const description = document.getElementById('transaction-description').value;
+
+  if (!date || isNaN(value)) return alert('Preencha todos os campos corretamente.');
+
+  transactions.push({ value, date, description });
+  saveTransactionsToLocalStorage(); // Salva no localStorage
+  updateFinances();
+  transactionForm.reset();
 });
