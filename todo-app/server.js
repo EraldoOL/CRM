@@ -1,16 +1,28 @@
 const express = require('express');
-const path = require('path');
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/auth');
+const taskRoutes = require('./routes/task');
+const financeRoutes = require('./routes/finance');
+const authMiddleware = require('./middleware/authMiddleware');
+const User = require('./models/user');
+
+dotenv.config();
+
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Servir a pasta 'public' como estática
-app.use(express.static(path.join(__dirname, 'public')));
+// Middleware
+app.use(bodyParser.json());
 
-// Rota para o index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+// Iniciar a criação das tabelas no banco de dados
+User.createUserTable();
 
-const PORT = 3000;
+// Rotas
+app.use('/api/auth', authRoutes);
+app.use('/api/tasks', authMiddleware, taskRoutes);
+app.use('/api/finance', authMiddleware, financeRoutes);
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
