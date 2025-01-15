@@ -1,28 +1,45 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
-const authRoutes = require('./routes/auth');
-const taskRoutes = require('./routes/task');
-const financeRoutes = require('./routes/finance');
-const authMiddleware = require('./middleware/authMiddleware');
-const User = require('./models/user');
-
-dotenv.config();
-
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const sqlite3 = require('sqlite3');
+const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const db = new sqlite3.Database('./data.db'); // Banco de dados SQLite
+const port = 3000;
 
-// Middleware
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(cors()); // Para permitir requisições de outras origens
 
-// Iniciar a criação das tabelas no banco de dados
-User.createUserTable();
+// Rota de cadastro
+app.post('/api/register', (req, res) => {
+  const { email, password } = req.body;
+  bcrypt.hash(password, 10, (err, hashedPassword) => {
+    if (err) return res.status(500).json({ message: 'Erro ao criptografar a senha' });
 
-// Rotas
-app.use('/api/auth', authRoutes);
-app.use('/api/tasks', authMiddleware, taskRoutes);
-app.use('/api/finance', authMiddleware, financeRoutes);
+    db.run('INSERT INTO users (email, password) VALUES (?, ?)', [email, hashedPassword], function(err) {
+      if (err) return res.status(500).json({ message: 'Erro ao cadastrar usuário' });
+      res.status(201).json({ message: 'Usuário cadastrado com sucesso' });
+    });
+  });
+});
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+// Rota de login
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+
+  db.get('SELECT * FROM users WHERE email = ?', [email], (err, user) => {
+    if (err || !user) return res.status(400).json({ message: 'Usuário não encontrado' });
+
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (err || !isMatch) return res.status(401).json({ message: 'Credenciais inválidas' });
+
+      const token = jwt.sign({ userId: user.id }, 'secrect_key', { expiresIn: '1h' });
+      res.status(200).json({ message: 'Login bem-sucedido', token });
+    });
+  });
+});
+
+// Iniciar o servidor
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
 });
