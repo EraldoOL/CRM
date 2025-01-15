@@ -1,26 +1,15 @@
 {
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "binutils": "^0.1.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2",
-    "sqlite3": "^5.1.7"
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49"
-  },
   "name": "todo-app",
   "version": "1.0.0",
+  "description": "API Backend",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "bcryptjs": "^2.4.3"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "scripts": {
+    "start": "node server.js"
+  }
 }
