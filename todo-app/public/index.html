@@ -8,122 +8,167 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+<div class="hamburger" id="hamburger">
+  <div class="line"></div>
+  <div class="line"></div>
+  <div class="line"></div>
+</div>
+<div class="sidebar" id="sidebar">
+  <div class="logo">Menu</div>
+  <ul class="menu">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="financas.html">Finanças</a></li>
+    
+    <li><a href="relatorios.html">Relatórios</a></li>
+  </ul>
+</div>
 
+<!-- Main Content -->
+<main class="content">
+  <header>
+    <h1>Dashboard</h1>
+  </header>
 
-  <!-- Conteúdo da Página (apenas visível após login) -->
-  <div id="content-section" style="display: none;">
-    <div class="hamburger" id="hamburger">
-      <div class="line"></div>
-      <div class="line"></div>
-      <div class="line"></div>
+  <section>
+    <!-- Add Task Section -->
+    <div class="add-task">
+      <h2>Adicionar Tarefa</h2>
+      <form id="task-form">
+        <input type="text" id="task-title" placeholder="Título da tarefa" required>
+        <textarea id="task-desc" placeholder="Descrição"></textarea>
+        <input type="datetime-local" id="task-deadline" required>
+        <button type="submit">Adicionar</button>
+      </form>
     </div>
-    <div class="sidebar" id="sidebar">
-      <div class="logo">Menu</div>
-      <ul class="menu">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="financas.html">Finanças</a></li>
-        <li><a href="relatorios.html">Relatórios</a></li>
-      </ul>
+
+    <!-- Task List -->
+    <div class="task-list">
+      <h2>Tarefas</h2>
+      <div>
+        <h3>Pendentes</h3>
+        <ul id="pending-tasks">
+          <!-- Tarefas pendentes serão adicionadas aqui -->
+        </ul>
+      </div>
+      <div>
+        <h3>Completas</h3>
+        <ul id="completed-tasks">
+          <!-- Tarefas completas serão adicionadas aqui -->
+        </ul>
+      </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="content">
-      <header>
-        <h1>Dashboard</h1>
-      </header>
+    <!-- Graphs -->
+    <div class="graphs">
+      <h2>Gráficos</h2>
+      <canvas id="task-chart"></canvas>
+    </div>
+  </section>
+</main>
 
-      <section>
-        <!-- Add Task Section -->
-        <div class="add-task">
-          <h2>Adicionar Tarefa</h2>
-          <form id="task-form">
-            <input type="text" id="task-title" placeholder="Título da tarefa" required>
-            <textarea id="task-desc" placeholder="Descrição"></textarea>
-            <input type="datetime-local" id="task-deadline" required>
-            <button type="submit">Adicionar</button>
-          </form>
-        </div>
+<script src="./js/script.js"></script>
 
-        <!-- Task List -->
-        <div class="task-list">
-          <h2>Tarefas</h2>
-          <div>
-            <h3>Pendentes</h3>
-            <ul id="pending-tasks"></ul>
-          </div>
-          <div>
-            <h3>Completas</h3>
-            <ul id="completed-tasks"></ul>
-          </div>
-        </div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const taskForm = document.getElementById("task-form");
+  const pendingTasksList = document.getElementById("pending-tasks");
+  const completedTasksList = document.getElementById("completed-tasks");
+  const taskChartCanvas = document.getElementById("task-chart");
 
-        <!-- Graphs -->
-        <div class="graphs">
-          <h2>Gráficos</h2>
-          <canvas id="task-chart"></canvas>
-        </div>
-      </section>
-    </main>
-  </div>
+  // Dados iniciais do gráfico
+  let completedTasks = 0;
+  let pendingTasks = 0;
 
-  <script src="./js/script.js"></script>
-  <script>
-    // Funções para exibir as seções de login e cadastro
-    function showRegisterForm() {
-      document.getElementById('login-form').style.display = 'none';
-      document.getElementById('register-form').style.display = 'block';
+  // Configuração do gráfico
+  const taskChart = new Chart(taskChartCanvas, {
+    type: "bar",
+    data: {
+      labels: ["Pendentes", "Concluídas"],
+      datasets: [
+        {
+          label: "Tarefas",
+          data: [pendingTasks, completedTasks],
+          backgroundColor: ["#f39c12", "#2ecc71"],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+
+  // Função para atualizar o gráfico
+  function updateChart() {
+    taskChart.data.datasets[0].data = [pendingTasks, completedTasks];
+    taskChart.update();
+  }
+
+  // Adicionar nova tarefa
+  taskForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const title = document.getElementById("task-title").value;
+    const desc = document.getElementById("task-desc").value;
+    const deadline = document.getElementById("task-deadline").value;
+
+    // Criar nova tarefa
+    const taskItem = document.createElement("li");
+    taskItem.innerHTML = `
+      <div>
+        <h3>${title}</h3>
+        <p>${desc}</p>
+        <small>Prazo: ${new Date(deadline).toLocaleString()}</small>
+      </div>
+      <div>
+        <button class="complete-btn">Concluir</button>
+        <button class="delete-btn">Excluir</button>
+      </div>
+    `;
+    pendingTasksList.appendChild(taskItem);
+
+    pendingTasks++; // Incrementa pendentes
+    updateChart();
+
+    taskForm.reset(); // Limpa o formulário
+  });
+
+  // Gerenciar ações de concluir e excluir
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("complete-btn")) {
+      const taskItem = e.target.closest("li");
+      pendingTasksList.removeChild(taskItem); // Remove da lista de pendentes
+      completedTasksList.appendChild(taskItem); // Move para a lista de concluídas
+      taskItem.querySelector(".complete-btn").remove(); // Remove o botão de concluir
+
+      pendingTasks--;
+      completedTasks++;
+      updateChart();
     }
 
-    function showLoginForm() {
-      document.getElementById('register-form').style.display = 'none';
-      document.getElementById('login-form').style.display = 'block';
-    }
+    if (e.target.classList.contains("delete-btn")) {
+      const taskItem = e.target.closest("li");
+      const isPending = pendingTasksList.contains(taskItem);
 
-    // Simulando uma verificação de login (você deve substituir isso com sua API de autenticação)
-    function loginUser(email, password) {
-      // Aqui você faria a requisição para seu servidor de autenticação (por exemplo, com fetch)
-      if (email === "admin@exemplo.com" && password === "senha123") {
-        // Sucesso no login
-        localStorage.setItem('auth', 'true'); // Marque como autenticado no localStorage
-        showContent();
+      // Remove da lista apropriada
+      if (isPending) {
+        pendingTasks--;
+        pendingTasksList.removeChild(taskItem);
       } else {
-        alert("Credenciais inválidas");
+        completedTasks--;
+        completedTasksList.removeChild(taskItem);
       }
+
+      updateChart();
     }
-
-    // Função de cadastro simulada (substitua pela lógica de cadastro da sua API)
-    function registerUser(name, email, password) {
-      // Aqui você faria a requisição para cadastrar o usuário
-      console.log("Usuário cadastrado:", name, email);
-      showLoginForm(); // Após o cadastro, mostrar o formulário de login
-    }
-
-    // Exibir conteúdo após o login bem-sucedido
-    function showContent() {
-      document.getElementById('auth-section').style.display = 'none'; // Esconde o formulário
-      document.getElementById('content-section').style.display = 'block'; // Mostra o conteúdo
-    }
-
-    // Verifique se o usuário já está autenticado
-    if (localStorage.getItem('auth') === 'true') {
-      showContent();
-    }
-
-    // Event listeners para login e cadastro
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
-      loginUser(email, password);
-    });
-
-    document.getElementById('registerForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const name = document.getElementById('register-name').value;
-      const email = document.getElementById('register-email').value;
-      const password = document.getElementById('register-password').value;
-      registerUser(name, email, password);
-    });
-  </script>
+  });
+});
+</script>
 </body>
 </html>
+
+Essa pág 

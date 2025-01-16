@@ -1,4 +1,4 @@
-/*const barChart = document.getElementById('bar-chart').getContext('2d');
+const barChart = document.getElementById('bar-chart').getContext('2d');
 const pieChart = document.getElementById('pie-chart').getContext('2d');
 
 let tasksCompleted = 0;
@@ -66,7 +66,7 @@ function updateCharts() {
 
   barChartInstance.update();
   pieChartInstance.update();
-}*/
+}
 
 // Seleciona elementos do DOM
 const hamburger = document.getElementById('hamburger');
