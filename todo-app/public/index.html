@@ -8,31 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <!-- Tela de Login e Cadastro -->
-  <div id="auth-section">
-    <!-- Formulário de Login -->
-    <div id="login-form" class="auth-form">
-      <h2>Login</h2>
-      <form id="loginForm">
-        <input type="email" id="login-email" placeholder="Email" required>
-        <input type="password" id="login-password" placeholder="Senha" required>
-        <button type="submit">Entrar</button>
-      </form>
-      <p>Não tem uma conta? <a href="#" onclick="showRegisterForm()">Cadastre-se</a></p>
-    </div>
 
-    <!-- Formulário de Cadastro -->
-    <div id="register-form" class="auth-form" style="display: none;">
-      <h2>Cadastro</h2>
-      <form id="registerForm">
-        <input type="text" id="register-name" placeholder="Nome Completo" required>
-        <input type="email" id="register-email" placeholder="Email" required>
-        <input type="password" id="register-password" placeholder="Senha" required>
-        <button type="submit">Cadastrar</button>
-      </form>
-      <p>Já tem uma conta? <a href="#" onclick="showLoginForm()">Login</a></p>
-    </div>
-  </div>
 
   <!-- Conteúdo da Página (apenas visível após login) -->
   <div id="content-section" style="display: none;">
